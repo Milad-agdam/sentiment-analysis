@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import plotly.express as px
 
 
 
@@ -27,9 +27,20 @@ with col1:
     st.pyplot(sentiment_counts.get_figure())
 
 with col2:
-    piechart = data.sentiment_label.value_counts().plot(kind='pie').to_dict()
-    plt.axis('equal')
-    st.pyplot(piechart)
+    # piechart = data.sentiment_label.value_counts().plot(kind='pie')
+    # plt.axis('equal')
+    # st.pyplot(piechart)
+    # Display percentage of positive, negative and neutral sentiments
+    positive = data['sentiment_label'][data['sentiment_label'] == "positive"].count()
+    negative = data['sentiment_label'][data['sentiment_label'] == "negative"].count()
+    neutral = data['sentiment_label'][data['sentiment_label'] == "neutral"].count()
+    counts = [positive,negative, neutral]
+    group = ['positive','negative', "neutral"]
+    fig = px.pie(data['sentiment_label'], values=counts ,names=group, color=group)
+    st.plotly_chart(fig)
+    
+    
+st.markdown("------------------------------------------------------------------------------------")
 
 
 
