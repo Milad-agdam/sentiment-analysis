@@ -92,3 +92,6 @@ def label_sentiment(score):
 
 # Apply the function to create a new column with sentiment labels
 df['sentiment_label'] = df['sentiment_score'].apply(label_sentiment)
+
+
+df.to_csv('data.csv', index=False)
