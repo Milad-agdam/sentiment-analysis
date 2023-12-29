@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Load your data into a Pandas DataFrame
-# df = pd.read_csv('data.csv')
+
 
 
 st.set_page_config(
@@ -14,13 +14,21 @@ st.set_page_config(
 st.title("Sentiment Analysis")
 st.markdown("------------------------------------------------------------------------------------")
 
+st.sidebar.markdown("Made with love using [streamlit](https://streamlit.io/)")
+st.sidebar.image(
+    "../images/sentiment-analysis.png"
+)
 
-filename = st.sidebar.file_uploader("Upload reviews data:", type=("csv", "xlsx"))
+data = pd.read_csv('data.csv')
+col1, col2 = st.columns(2)
+with col1:
+    # sentiment_counts = data['sentiment_label'].value_counts()
+    sentiment_counts = sns.countplot(data, x="sentiment_label", palette=["#7fcdbb", '#432371',"#FAAE7B" ])
+    st.pyplot(sentiment_counts.get_figure())
 
-if filename is not None:
-    data = pd.read_csv(filename)
-    col1, col2 = st.columns(2)
-    with col1:
-        sentiment_counts = data['sentiment_label'].value_counts()
-        st.bar_chart(sentiment_counts)
-    
+with col2:
+    piechart = data.sentiment_label.value_counts().plot(kind='pie')
+    st.pyplot(piechart)
+
+
+
