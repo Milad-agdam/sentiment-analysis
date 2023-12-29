@@ -27,7 +27,8 @@ with col1:
     st.pyplot(sentiment_counts.get_figure())
 
 with col2:
-    piechart = data.sentiment_label.value_counts().plot(kind='pie')
+    piechart = data.sentiment_label.value_counts().plot(kind='pie').to_dict()
+    plt.axis('equal')
     st.pyplot(piechart)
 
 
