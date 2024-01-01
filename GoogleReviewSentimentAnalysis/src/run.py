@@ -11,7 +11,7 @@ st.set_page_config(
     page_title="Sentiment Analyzer", page_icon="📊", layout="wide"
 )
 
-st.title("Sentiment Analysis")
+st.title("Sentiment Analysis App 😊😐😔😡")
 st.markdown("------------------------------------------------------------------------------------")
 
 st.sidebar.markdown("Made with love using [streamlit](https://streamlit.io/)")
@@ -43,7 +43,3 @@ with col2:
     
 st.markdown("------------------------------------------------------------------------------------")
 
-# st.components.html("http://marketing.mealzo.co.uk/Reports/powerbi/google-bussines")
-st.markdown("""
-    <iframe width="600" height="606" src="http://marketing.mealzo.co.uk/Reports/powerbi/google-bussines" frameborder="0" style="border:0" allowfullscreen></iframe>
-    """, unsafe_allow_html=True)
