@@ -52,5 +52,5 @@ Replace your_dashboard_script.py with the name of your Python script containing 
 
 
 <p align="center">
-  <img src="../images/Screenshot.png" width="700" title="hover text">
+  <img src="../images/Screenshot.png" width="550" title="hover text">
 </p>
