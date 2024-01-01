@@ -6,7 +6,6 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.sentiment import SentimentIntensityAnalyzer
 import emoji
-import matplotlib.pyplot as plt
 
 
 df = pd.read_csv('output.csv')

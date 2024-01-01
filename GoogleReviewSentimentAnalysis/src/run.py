@@ -6,8 +6,7 @@ import seaborn as sns
 import plotly.express as px
 from wordcloud import WordCloud
 from wordcloud import ImageColorGenerator
-from PIL import Image
-import os 
+
 
 # Define your color palette for the sentiment labels
 colors = ["#7fcdbb", '#432371',"#FAAE7B" ]
