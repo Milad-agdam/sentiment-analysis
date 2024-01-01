@@ -43,6 +43,14 @@ streamlit run your_dashboard_script.py
 Replace your_dashboard_script.py with the name of your Python script containing the Streamlit dashboard code.
 
 ## Additional Information
+
 - The sentiment analysis script cleans and processes text data, providing sentiment scores and labels.
 - The Streamlit dashboard visualizes sentiment patterns with various plots and charts.
 - Contributions and feedback are welcome. Feel free to open issues or submit pull requests.
+
+
+
+
+<p align="center">
+  <img src="../images/Screenshot.png" width="500" title="hover text">
+</p>
