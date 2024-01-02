@@ -26,8 +26,8 @@ data = pd.read_csv('data.csv')
 
 # Show a quick summary of the dataset
 st.sidebar.title('Dataset Overview')
-st.sidebar.markdown(f"Total Reviews: {len(data)}")
-st.sidebar.markdown(f"Avg. Sentiment Score: {data['sentiment_score'].mean():.2f}")
+st.sidebar.markdown(f"Total Reviews: `{len(data)}`")
+st.sidebar.markdown(f"Avg. Sentiment Score: `{data['sentiment_score'].mean():.2f}`")
 
 
 
