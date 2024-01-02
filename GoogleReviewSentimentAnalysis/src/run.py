@@ -5,9 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 from wordcloud import WordCloud, STOPWORDS
-from wordcloud import ImageColorGenerator
-from st_aggrid import AgGrid
-
+import seaborn as sns
+from scipy import stats
 
 # Define your color palette for the sentiment labels
 colors = ["#7fcdbb", '#432371',"#FAAE7B" ]
@@ -54,21 +53,7 @@ st.sidebar.markdown('📢 Follow us on [Github](https://github.com/Milad-agdam) 
 
 col1, col2 = st.columns(2)
 
-# Function to display an interactive table using streamlit-aggrid
-def display_interactive_table(df):
-    # Display the table with streamlit-aggrid
-    gb = AgGrid(
-        df,
-        editable=False, # Set to True if you want the data to be editable
-        sortable=True,
-        filter=True,
-        resizable=True,
-        defaultWidth=5,
-        fit_columns_on_grid_load=True,
-        height=300, # You can adjust the height
-        width='100%',
-    )
-    return gb
+
 # Visualization functions
 def create_treemap(data, path, values, color_discrete_sequence):
     fig = px.treemap(data, path=path, values=values, color_discrete_sequence=color_discrete_sequence)
@@ -81,14 +66,13 @@ def create_pie(data, values, names, color_discrete_sequence):
 
 # Column 1: Sentiment Label Distribution and Treemap
 with col1:
-    
-    # Optionally, filter the dataset for the table to specific columns
-    columns_to_display = ['cleaned_review','sentiment_label', 'sentiment_score']
-    data_for_table = data[columns_to_display]
-
-    # Show the interactive table in the dashboard
-    st.subheader('Interactive Data Table')
-    display_interactive_table(data_for_table)
+    st.subheader('Average Sentiment Score by Sentiment Label')
+    sentiment_means = data.groupby('sentiment_label')['sentiment_score'].mean().reset_index()
+    fig, ax = plt.subplots()
+    sns.barplot(x='sentiment_label', y='sentiment_score', data=sentiment_means, palette=colors)
+    ax.set_xlabel('Sentiment Label')
+    ax.set_ylabel('Average Sentiment Score')
+    st.pyplot(fig)
     
     st.subheader('Distribution of Sentiment Labels')
     sentiment_counts = data['sentiment_label'].value_counts().reset_index()
