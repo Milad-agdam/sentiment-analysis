@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-from wordcloud import WordCloud
+from wordcloud import WordCloud, STOPWORDS
 from wordcloud import ImageColorGenerator
 
 
@@ -22,9 +22,18 @@ st.sidebar.markdown("Made with love using [streamlit](https://streamlit.io/)")
 st.sidebar.image(
     "../images/sentiment-analysis.png"
 )
-
-
 data = pd.read_csv('data.csv')
+
+# Show a quick summary of the dataset
+st.sidebar.title('Dataset Overview')
+st.sidebar.markdown(f"Total Reviews: {len(data)}")
+st.sidebar.markdown(f"Avg. Sentiment Score: {data['sentiment_score'].mean():.2f}")
+
+
+#Include more contact or author information
+st.sidebar.markdown('---')
+# st.sidebar.markdown('👩‍💻 Developed by [Your Name](https://yourwebsite.com)')
+st.sidebar.markdown('📢 Follow us on [Github](https://github.com/Milad-agdam) [LinkedIn](https://ir.linkedin.com/in/milad-gashangi-agdam-)')
 
 col1, col2 = st.columns(2)
 
@@ -73,9 +82,10 @@ with col2:
 st.subheader('Word Cloud for Positive Sentiment')
 positive_comments = data["cleaned_review"][data['sentiment_label']  == "positive"]
 positive_text = " ".join(comment for comment in positive_comments)
-# Add this line for debugging
-wordcloud = WordCloud(background_color="white").generate(positive_text)
+max_words = 50  # Adjust the number of words as needed
+stopwords = set(STOPWORDS)
 fig, ax = plt.subplots(figsize = (12, 12))
+wordcloud = WordCloud(background_color="white", max_words=max_words, stopwords=stopwords).generate(positive_text)
 plt.imshow(wordcloud, interpolation='bilinear')
 plt.axis('off')
 st.pyplot(fig)
