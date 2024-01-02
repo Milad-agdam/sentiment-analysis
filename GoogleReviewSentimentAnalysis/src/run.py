@@ -18,7 +18,7 @@ st.set_page_config(
 st.title("Sentiment Analysis Dashboard 😊😐😡")
 st.markdown("------------------------------------------------------------------------------------")
 
-st.sidebar.markdown("Made with love using [streamlit](https://streamlit.io/)")
+st.sidebar.markdown("Made with ❤️ using [streamlit](https://streamlit.io/)")
 st.sidebar.image(
     "../images/sentiment-analysis.png"
 )
@@ -30,64 +30,75 @@ st.sidebar.markdown(f"Total Reviews: {len(data)}")
 st.sidebar.markdown(f"Avg. Sentiment Score: {data['sentiment_score'].mean():.2f}")
 
 
+
+
+# Filter Sidebar
+st.sidebar.title('Filters')
+sentiment_label = st.sidebar.multiselect(
+    "Choose Sentiment Labels",
+    options=data['sentiment_label'].unique(),
+    default=data['sentiment_label'].unique()
+)
+
+# Filtering data based on selection
+if sentiment_label:
+    data = data[data['sentiment_label'].isin(sentiment_label)]
+
+
 #Include more contact or author information
 st.sidebar.markdown('---')
 # st.sidebar.markdown('👩‍💻 Developed by [Your Name](https://yourwebsite.com)')
 st.sidebar.markdown('📢 Follow us on [Github](https://github.com/Milad-agdam) [LinkedIn](https://ir.linkedin.com/in/milad-gashangi-agdam-)')
 
+
 col1, col2 = st.columns(2)
 
+# Visualization functions
+def create_treemap(data, path, values, color_discrete_sequence):
+    fig = px.treemap(data, path=path, values=values, color_discrete_sequence=color_discrete_sequence)
+    return fig
+
+def create_pie(data, values, names, color_discrete_sequence):
+    fig = px.pie(data, values=values, names=names, color_discrete_sequence=color_discrete_sequence)
+    return fig
+
+
+# Column 1: Sentiment Label Distribution and Treemap
 with col1:
     st.subheader('Distribution of Sentiment Labels')
-    # Create the countplot
-    sns.set_theme(style="whitegrid")
-    sentiment_counts = sns.countplot(data, x="sentiment_label", palette=colors)
-    st.pyplot(sentiment_counts.get_figure())
-    
-    # Set subheader for treemap
     sentiment_counts = data['sentiment_label'].value_counts().reset_index()
     sentiment_counts.columns = ['sentiment_label', 'counts']
-
-
-    st.subheader('Treemap of Sentiment Distribution')
-
-    # Creating a treemap using Plotly
-    fig = px.treemap(sentiment_counts, path=['sentiment_label'], values='counts', color_discrete_sequence=colors)
-
-    # Display Plotly treemap in Streamlit
-    st.plotly_chart(fig, use_container_width=True)
     
+    fig = create_treemap(sentiment_counts, path=['sentiment_label'], values='counts', color_discrete_sequence=colors)
+    st.plotly_chart(fig, use_container_width=True)
 
+# Column 2: Sentiment Proportion Pie Chart and Sentiment Scores Histogram
 with col2:
     st.subheader('Sentiment Proportion')
-    positive = data['sentiment_label'][data['sentiment_label'] == "positive"].count()
-    negative = data['sentiment_label'][data['sentiment_label'] == "negative"].count()
-    neutral = data['sentiment_label'][data['sentiment_label'] == "neutral"].count()
-    counts = [positive,negative, neutral]
-    group = ['positive','negative', "neutral"]
-    fig = px.pie(data['sentiment_label'], values=counts ,names=group, color_discrete_sequence=colors)
+    sentiment_counts = data['sentiment_label'].value_counts()
+    
+    fig = create_pie(data, values=sentiment_counts.values, names=sentiment_counts.index, color_discrete_sequence=colors)
     st.plotly_chart(fig)
     
-    #create a histogram
     st.subheader('Distribution of Sentiment Scores')
     fig, ax = plt.subplots()
-    sns.histplot(data['sentiment_score'], bins=50, kde=False, ax=ax, color='#9e9e9e', edgecolor='#BB8FCE')
-    # ax.set_title('Distribution of Sentiment Scores')
+    sns.histplot(data, x='sentiment_score', bins=50, kde=False, color='#9e9e9e', edgecolor='#BB8FCE')
     ax.set_xlabel('Sentiment Score')
     ax.set_ylabel('Number of Reviews')
     st.pyplot(fig)
     
 
-    # Create the wordcount
+# Word Cloud for Positive Sentiment
 st.subheader('Word Cloud for Positive Sentiment')
-positive_comments = data["cleaned_review"][data['sentiment_label']  == "positive"]
-positive_text = " ".join(comment for comment in positive_comments)
-max_words = 50  # Adjust the number of words as needed
-stopwords = set(STOPWORDS)
-fig, ax = plt.subplots(figsize = (12, 12))
-wordcloud = WordCloud(background_color="white", max_words=max_words, stopwords=stopwords).generate(positive_text)
-plt.imshow(wordcloud, interpolation='bilinear')
-plt.axis('off')
-st.pyplot(fig)
-st.markdown("------------------------------------------------------------------------------------")
+if 'positive' in sentiment_label:
+    positive_comments = data["cleaned_review"][data['sentiment_label'] == "positive"]
+    positive_text = " ".join(comment for comment in positive_comments)
+    stopwords = set(STOPWORDS)
+    wordcloud = WordCloud(background_color="white", max_words=50, stopwords=stopwords).generate(positive_text)
+    fig, ax = plt.subplots(figsize=(12, 12))
+    ax.imshow(wordcloud, interpolation='bilinear')
+    ax.axis('off')
+    st.pyplot(fig)
+
+st.markdown("---")
 
